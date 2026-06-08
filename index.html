@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GRADE X : 장화홍련</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Noto+Serif+KR:wght@300;400;600&family=Noto+Sans+KR:wght@300;400&display=swap');
+
+:root {
+  --bg: #0a0a0c;
+  --panel: #0d1117;
+  --border: #1a2030;
+  --em: #00e09a;
+  --em-dim: rgba(0,224,154,0.1);
+  --red: #e03030;
+  --red-dim: rgba(224,48,48,0.15);
+  --amber: #e09000;
+  --text: #d0dde8;
+  --text-dim: #4a6070;
+  --text-sub: #7a9aaa;
+  --hud-h: 60px;
+  --asset-h: 300px;
+  --choice-h: 116px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Noto Sans KR',sans-serif;
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+
+/* 호러 폰트 */
+@import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
+
+/* ══ 타이틀 ══ */
+#title-screen{
+  position:fixed;inset:0;
+  background:#000;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+  overflow:hidden;
+}
+
+/* 핏빛 배경 안개 */
+#title-screen::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 50% 45%, rgba(140,0,0,0.3) 0%, transparent 55%),
+    radial-gradient(ellipse at 20% 80%, rgba(80,0,0,0.2) 0%, transparent 40%),
+    radial-gradient(ellipse at 80% 20%, rgba(100,0,0,0.15) 0%, transparent 40%),
+    #000;
+  pointer-events:none;
+}
+
+/* 중앙 컨테이너 */
+.t-panel{
+  position:relative;z-index:1;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;
+  gap:24px;
+  padding:40px 48px;
+}
+
+/* GRADE X 상단 소제목 */
+.t-grade-tag{
+  font-family:'Share Tech Mono',monospace;
+  font-size:13px;
+  color:rgba(200,50,50,0.7);
+  letter-spacing:8px;
+  margin-bottom:-8px;
+}
+
+/* 메인 타이틀 */
+.t-title{
+  font-family:'Creepster',cursive;
+  font-size:110px;
+  color:#fff;
+  letter-spacing:4px;
+  line-height:1.05;
+  text-shadow:
+    0 0 20px rgba(180,0,0,0.9),
+    0 0 50px rgba(120,0,0,0.6),
+    0 0 100px rgba(80,0,0,0.3),
+    4px 4px 0px #1a0000;
+  animation: titleGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+  0%   { text-shadow: 0 0 20px rgba(180,0,0,0.9), 0 0 50px rgba(120,0,0,0.5), 4px 4px 0 #1a0000; }
+  100% { text-shadow: 0 0 35px rgba(240,0,0,1),   0 0 80px rgba(160,0,0,0.7), 0 0 120px rgba(100,0,0,0.4), 4px 4px 0 #1a0000; }
+}
+
+/* 장화만 빨간색 */
+.t-title .t-red{
+  color:#cc0000;
+  text-shadow:
+    0 0 20px rgba(255,0,0,1),
+    0 0 60px rgba(200,0,0,0.7),
+    4px 4px 0 #500000;
+}
+
+/* 구분자 , */
+.t-title .t-colon{
+  color:rgba(255,255,255,0.5);
+}
+
+/* 부제 */
+.t-rule{
+  font-family:'Share Tech Mono',monospace;
+  font-size:12px;
+  color:rgba(180,50,50,0.65);
+  letter-spacing:5px;
+}
+
+/* 스토리 텍스트 */
+.t-story{
+  font-family:'Noto Serif KR',serif;
+  font-size:14px;
+  color:rgba(200,170,170,0.8);
+  line-height:2.1;
+  font-weight:300;
+  font-style:italic;
+}
+.t-story b{color:rgba(255,220,220,0.95);font-weight:400;}
+
+/* 시작 버튼 */
+.t-btn{
+  background:transparent;
+  border:1px solid rgba(180,0,0,0.65);
+  padding:14px 44px;
+  color:rgba(220,80,80,0.95);
+  font-family:'Noto Serif KR',serif;
+  font-size:16px;font-weight:300;
+  letter-spacing:6px;
+  cursor:pointer;
+  transition:all .3s;
+  white-space:nowrap;
+  box-shadow:0 0 20px rgba(150,0,0,0.2), inset 0 0 20px rgba(100,0,0,0.05);
+  margin-top:8px;
+}
+.t-btn:hover{
+  background:rgba(120,0,0,0.2);
+  border-color:rgba(240,0,0,0.85);
+  color:#ff7070;
+  letter-spacing:8px;
+  box-shadow:0 0 35px rgba(200,0,0,0.4);
+}
+
+/* 장화 글자 빨간색 + 낡은 전등 깜빡임 */
+.title-blood{
+  color:#cc0000;
+  animation: flicker 4s linear infinite;
+}
+@keyframes flicker {
+  0%   { opacity:1; }
+  2%   { opacity:0.2; }
+  4%   { opacity:1; }
+  6%   { opacity:0.6; }
+  7%   { opacity:0.1; }
+  8%   { opacity:1; }
+  9%   { opacity:0.8; }
+  10%  { opacity:0.15; }
+  11%  { opacity:1; }
+  30%  { opacity:1; }
+  31%  { opacity:0.3; }
+  32%  { opacity:1; }
+  60%  { opacity:1; }
+  61%  { opacity:0.1; }
+  62%  { opacity:0.9; }
+  63%  { opacity:0.2; }
+  64%  { opacity:1; }
+  100% { opacity:1; }
+}
+
+/* 기존 t-asset, t-orb 등 불필요 CSS 제거됨 */
+
+/* ══ HUD ══ */
+#hud{
+  height:80px;
+  background:#0a0101;
+  border-bottom:2px solid rgba(140,0,0,0.5);
+  display:none;
+  align-items:center;
+  padding:0 24px;gap:20px;
+  flex-shrink:0;z-index:100;
+}
+
+.hud-logo{
+  font-family:'Creepster',cursive;
+  font-size:20px;color:#cc2222;
+  letter-spacing:3px;white-space:nowrap;flex-shrink:0;
+  text-shadow:0 0 10px rgba(180,0,0,0.6);
+}
+
+.hud-vars{display:flex;gap:16px;flex:1;}
+.hud-v{display:flex;align-items:center;gap:10px;flex:1;}
+
+.hud-vl{
+  font-family:'Noto Serif KR',serif;
+  font-size:14px;color:#cc8888;
+  font-style:normal;font-weight:300;
+  letter-spacing:0px;white-space:nowrap;
+  width:60px;text-align:right;
+}
+
+.hud-bw{
+  flex:1;height:8px;
+  background:rgba(60,0,0,0.3);
+  border-radius:4px;overflow:hidden;
+  border:1px solid rgba(80,0,0,0.25);
+}
+
+/* 변수 바 색상 — 원본 유지 */
+.hud-b{height:100%;border-radius:4px;transition:width .5s ease;}
+.bt{background:linear-gradient(90deg,#0055dd,#44aaff);}
+.bs{background:linear-gradient(90deg,#009955,var(--em));}
+.ba{background:linear-gradient(90deg,#5500bb,#aa44ff);}
+.bo{background:linear-gradient(90deg,#cc3300,var(--red));}
+
+.hud-vv{
+  font-family:'Noto Serif KR',serif;
+  font-size:16px;color:#ffbbbb;
+  width:36px;text-align:right;
+  font-weight:300;font-style:normal;
+  text-shadow:0 0 5px rgba(180,0,0,0.4);
+}
+
+.hud-timer{
+  font-family:'Share Tech Mono',monospace;
+  font-size:26px;color:#dd0000;
+  letter-spacing:2px;flex-shrink:0;
+  animation:tp 2s infinite;
+  text-shadow:0 0 12px rgba(200,0,0,0.7);
+}
+@keyframes tp{0%,100%{opacity:1;}50%{opacity:.55;}}
+.hud-danger .hud-timer{animation:df .4s infinite;}
+@keyframes df{0%,100%{color:#ff0000;text-shadow:0 0 18px #ff0000;}50%{color:#cc0000;text-shadow:none;}}
+
+/* ══ 게임 래퍼 — 좌우 2열 ══ */
+#game-wrap{
+  display:none;flex:1;overflow:hidden;
+  flex-direction:row;
+  background:#070101;
+}
+
+/* ══ 에셋 영역 — 왼쪽 ══ */
+#asset-area{
+  flex:1;
+  background:#070101;
+  border-right:1px solid rgba(120,0,0,0.4);
+  position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+
+#scene-video{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  filter:brightness(0.85);
+  z-index:0;
+  background:#070101;
+}
+
+/* ══ 오른쪽 패널 — 대사 + 선택지 ══ */
+#right-panel{
+  width:34%;
+  flex-shrink:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  background:#070101;
+  overflow:hidden;
+  height:100%;
+}
+
+/* ══ 대사/지문 영역 — 세로 50% ══ */
+#content-area{
+  flex:1;
+  overflow-y:auto;
+  padding:10px 12px;
+  display:flex;flex-direction:column;gap:6px;
+  align-content:flex-start;
+  border-bottom:1px solid rgba(120,0,0,0.3);
+  scrollbar-width:thin;
+  scrollbar-color:rgba(120,0,0,0.4) transparent;
+}
+#content-area::-webkit-scrollbar{width:3px;}
+#content-area::-webkit-scrollbar-thumb{background:rgba(140,0,0,0.5);border-radius:2px;}
+
+/* ══ 선택지 — 고정 높이 ══ */
+#choice-area{
+  flex-shrink:0;
+  height:30%;
+  display:flex;
+  flex-direction:column;
+  background:#0f0303;
+  border-top:2px solid rgba(200,0,0,0.7);
+  position:relative;
+}
+
+.asset-bg{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 30% 60%, rgba(0,0,0,0.5) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 40%, rgba(0,0,0,0.4) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 100%, rgba(0,0,0,0.6) 0%, transparent 45%),
+    linear-gradient(160deg, #5a0a0a 0%, #2a0505 40%, #1a0808 70%, #0d0303 100%);
+}
+
+#asset-area::after{
+  content:'';position:absolute;inset:0;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='300' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+  background-size:400px 300px;mix-blend-mode:overlay;pointer-events:none;
+}
+
+#asset-area::before{
+  content:'';position:absolute;inset:0;z-index:0;
+  background-image:
+    radial-gradient(ellipse 1px 60px at 10% 80%, rgba(80,10,10,0.5) 0%, transparent 100%),
+    radial-gradient(ellipse 60px 1px at 5% 70%,  rgba(80,10,10,0.4) 0%, transparent 100%),
+    radial-gradient(ellipse 1px 50px at 80% 85%, rgba(80,10,10,0.4) 0%, transparent 100%),
+    radial-gradient(ellipse 50px 1px at 90% 75%, rgba(60,8,8,0.3)  0%, transparent 100%);
+  pointer-events:none;
+}
+
+.asset-tag, .asset-title, .asset-sub, .blood-drip, .asset-line{ display:none !important; }
+  position:absolute;top:14px;left:18px;
+  font-family:'Share Tech Mono',monospace;
+  font-size:9px;color:rgba(220,120,120,0.5);
+  letter-spacing:4px;z-index:2;
+}
+
+.asset-title{
+  font-family:'Creepster',cursive;
+  font-size:34px;font-weight:400;
+  color:#f0d0c8;text-align:center;
+  text-shadow:
+    0 0 20px rgba(180,0,0,0.8),
+    0 0 50px rgba(120,0,0,0.4),
+    2px 2px 0 #1a0000;
+  position:relative;z-index:2;
+  line-height:1.4;
+  animation:assetGlow 3s ease-in-out infinite alternate;
+}
+@keyframes assetGlow{
+  0%  {text-shadow:0 0 20px rgba(160,0,0,0.7), 2px 2px 0 #1a0000;}
+  100%{text-shadow:0 0 35px rgba(220,0,0,1), 0 0 60px rgba(120,0,0,0.4), 2px 2px 0 #1a0000;}
+}
+
+.asset-sub{
+  position:absolute;bottom:14px;right:18px;
+  font-family:'Share Tech Mono',monospace;
+  font-size:9px;color:rgba(200,100,100,0.35);
+  letter-spacing:3px;z-index:2;
+}
+
+.asset-line{
+  position:absolute;bottom:0;left:0;right:0;
+  height:1px;z-index:2;
+  background:linear-gradient(90deg,transparent,rgba(160,0,0,0.6),transparent);
+  opacity:.5;
+}
+
+/* ══ 연출/대화 블록 ══ */
+
+.dir-block{
+  background:rgba(80,0,0,0.08);
+  border-left:2px solid rgba(140,0,0,0.3);
+  padding:8px 14px;
+  font-family:'Share Tech Mono',monospace;
+  font-size:12px;color:rgba(160,100,100,0.65);
+  letter-spacing:.3px;line-height:1.8;
+  font-style:italic;
+}
+
+.dlg-block{
+  background:rgba(12,3,3,0.9);
+  border:1px solid rgba(80,0,0,0.3);
+  padding:16px 18px;
+  display:flex;flex-direction:column;gap:10px;
+}
+
+.spk{
+  font-family:'Creepster',cursive;
+  font-size:17px;color:#cc3333;
+  letter-spacing:3px;margin-bottom:4px;
+  text-shadow:0 0 8px rgba(160,0,0,0.5);
+}
+
+.dlg-line{
+  font-family:'Noto Serif KR',serif;
+  font-size:17px;font-weight:400;
+  color:#ffffff;line-height:2;
+}
+
+/* 지문 — 회색 이탤릭 */
+.stg-dir{
+  font-family:'Noto Serif KR',serif;
+  font-size:13px;font-weight:300;
+  color:rgba(200,190,180,0.85);
+  line-height:1.9;font-style:italic;
+  padding-left:8px;
+  border-left:2px solid rgba(100,100,100,0.2);
+}
+.c-btn{
+  flex:0 0 50%;
+  background:rgba(15,2,2,0.95);
+  border:none;
+  border-bottom:1px solid rgba(100,0,0,0.35);
+  border-left:4px solid rgba(180,0,0,0.6);
+  padding:10px 16px;
+  color:#e8d0c8;
+  text-align:left;
+  cursor:pointer;
+  transition:all .2s;
+  display:flex;flex-direction:column;
+  justify-content:space-between;
+  position:relative;overflow:hidden;
+}
+.c-btn:last-child{border-bottom:none;}
+.c-btn::before{
+  content:'';
+  position:absolute;top:0;left:0;bottom:0;
+  width:4px;background:#ff2222;
+  transform:scaleY(0);transform-origin:top;
+  transition:transform .22s ease;
+}
+.c-btn:hover{background:rgba(80,0,0,0.4);border-left-color:rgba(255,0,0,0.9);}
+.c-btn:hover::before{transform:scaleY(1);}
+
+.c-btn.single{
+  flex:0 0 50%;
+  margin-top:auto;
+}
+
+.c-lbl{
+  font-family:'Share Tech Mono',monospace;
+  font-size:11px;color:#dd4444;
+  letter-spacing:2px;margin-bottom:5px;
+  text-shadow:0 0 6px rgba(180,0,0,0.5);
+}
+
+.c-txt{
+  font-family:'Noto Serif KR',serif;
+  font-size:15px;font-weight:500;
+  color:#f5c842;line-height:1.6;flex:1;
+}
+
+.cond-block{
+  background:rgba(60,0,0,0.12);
+  border:1px solid rgba(100,0,0,0.25);
+  padding:7px 14px;
+  font-family:'Share Tech Mono',monospace;
+  font-size:10px;color:rgba(180,80,80,0.8);
+  letter-spacing:.5px;line-height:1.7;
+}
+
+.danger-block{
+  background:rgba(180,0,0,0.12);
+  border:1px solid rgba(200,0,0,0.35);
+  padding:8px 14px;
+  font-family:'Share Tech Mono',monospace;
+  font-size:10px;color:#ee5555;
+  letter-spacing:.5px;line-height:1.7;
+  animation:da 2s infinite;
+}
+@keyframes da{0%,100%{border-color:rgba(200,0,0,.35);}50%{border-color:rgba(200,0,0,.1);}}
+
+.loop-block{
+  background:rgba(140,60,0,0.1);
+  border:1px solid rgba(160,80,0,0.25);
+  padding:6px 14px;
+  font-family:'Share Tech Mono',monospace;
+  font-size:10px;color:#cc7733;
+  letter-spacing:1px;display:inline-block;
+}
+
+/* ══ 선택지 하단 고정 ══ */
+/* 선택 구분 레이블 제거 */
+
+.c-btn{
+  flex:0 0 50%;
+  background:rgba(25,3,3,0.6);
+  border:none;
+  border-bottom:1px solid rgba(80,0,0,0.3);
+  padding:8px 14px;
+  color:#e8d0c8;
+  text-align:left;
+  cursor:pointer;
+  transition:all .2s;
+  display:flex;flex-direction:column;
+  justify-content:space-between;
+  position:relative;overflow:hidden;
+}
+.c-btn:last-child{border-bottom:none;}
+.c-btn::before{
+  content:'';
+  position:absolute;top:0;left:0;bottom:0;
+  width:2px;background:#cc0000;
+  transform:scaleY(0);transform-origin:top;
+  transition:transform .22s ease;
+}
+.c-btn:hover{background:rgba(100,0,0,0.2);}
+.c-btn:hover::before{transform:scaleY(1);}
+
+.c-btn.single{
+  flex:0 0 50%;
+  margin-top:auto;
+}
+
+.c-lbl{
+  font-family:'Share Tech Mono',monospace;
+  font-size:12px;color:#dd4444;
+  letter-spacing:2px;margin-bottom:6px;
+  text-shadow:0 0 6px rgba(180,0,0,0.5);
+}
+
+.c-eff{
+  font-family:'Share Tech Mono',monospace;
+  font-size:12px;color:#ffaaaa;
+  margin-top:7px;letter-spacing:1px;
+  border-top:1px solid rgba(120,0,0,0.3);
+  padding-top:5px;
+  text-shadow:0 0 6px rgba(200,0,0,0.4);
+}
+
+/* ══ 엔딩 ══ */
+.end-wrap{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;padding:40px 24px;gap:18px;
+  background:#070101;
+}
+
+.end-tag{
+  font-family:'Share Tech Mono',monospace;
+  font-size:10px;letter-spacing:6px;
+}
+.end-tag.t{color:#cc3333;text-shadow:0 0 10px rgba(180,0,0,0.6);}
+.end-tag.b{color:rgba(180,100,100,0.6);}
+.end-tag.g{color:#cc0000;text-shadow:0 0 10px rgba(200,0,0,0.7);}
+
+.end-title{
+  font-family:'Creepster',cursive;
+  font-size:36px;font-weight:400;line-height:1.4;
+}
+.end-title.t{color:#f0d0c8;text-shadow:0 0 30px rgba(160,0,0,0.6),2px 2px 0 #1a0000;}
+.end-title.b{color:rgba(180,130,130,0.8);}
+.end-title.g{color:#cc0000;text-shadow:0 0 40px rgba(200,0,0,0.8),2px 2px 0 #1a0000;}
+
+.end-body{
+  font-family:'Noto Serif KR',serif;
+  font-size:15px;font-weight:300;
+  line-height:2.2;color:rgba(200,160,150,0.85);
+  max-width:460px;font-style:italic;
+}
+
+.end-stats{
+  font-family:'Share Tech Mono',monospace;
+  font-size:10px;color:rgba(160,80,80,0.6);
+  letter-spacing:1px;line-height:2;
+}
+
+.end-btn{
+  background:transparent;
+  border:1px solid currentColor;
+  padding:12px 32px;
+  font-family:'Noto Serif KR',serif;
+  font-size:14px;font-weight:300;
+  letter-spacing:5px;
+  cursor:pointer;transition:all .25s;margin-top:6px;
+}
+.end-btn.t{color:#cc3333;}
+.end-btn.b{color:rgba(160,100,100,0.7);}
+.end-btn.g{color:#cc0000;}
+.end-btn:hover{opacity:.7;letter-spacing:7px;}
+
+
+/* ══ 타이핑 효과 ══ */
+.typing-now::after{
+  content:'▌';
+  display:inline-block;
+  margin-left:2px;
+  color:#cc3333;
+  animation:typingCursor .7s infinite;
+}
+@keyframes typingCursor{
+  0%,45%{opacity:1;}
+  46%,100%{opacity:0;}
+}
+
+/* ══ 애니메이션 ══ */
+@keyframes fi{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
+.fi{animation:fi .3s ease-out;}
+</style>
+</head>
+<body>
+
+<!-- 타이틀 -->
+<div id="title-screen">
+  <div class="t-panel">
+    <div style="font-family:'Creepster',cursive;font-size:26px;color:rgba(200,150,150,0.6);letter-spacing:3px;margin-bottom:-16px;">25730029 김다영</div>
+    <div class="t-grade-tag">GRADE X</div>
+    <div class="t-title"><span class="t-red title-blood">장화</span><span class="t-colon">,</span>홍련</div>
+    <div class="t-rule">등급이 곧 존재다.</div>
+    <div class="t-story">
+      <b>언니는 오늘 X등급 낙인을 받았다.</b><br>
+      너에게 남은 시간은 72시간이다.
+    </div>
+    <button class="t-btn" onclick="startGame()">언니를 찾아</button>
+  </div>
+</div>
+
+<!-- HUD -->
+<div id="hud">
+  <div class="hud-logo"><span style="color:#fff">GRADE</span> <span style="color:#cc0000">X</span> <span style="color:#fff">:</span> <span style="font-family:'Creepster',cursive;color:#cc0000">장화</span><span style="font-family:'Creepster',cursive;color:#fff">홍련</span></div>
+  <div class="hud-vars">
+    <div class="hud-v">
+      <span class="hud-vl">진실</span>
+      <div class="hud-bw"><div class="hud-b bt" id="bar-truth" style="width:0%"></div></div>
+      <span class="hud-vv" id="val-truth">0</span>
+    </div>
+    <div class="hud-v">
+      <span class="hud-vl">신뢰</span>
+      <div class="hud-bw"><div class="hud-b bs" id="bar-trust" style="width:0%"></div></div>
+      <span class="hud-vv" id="val-trust">0</span>
+    </div>
+    <div class="hud-v">
+      <span class="hud-vl">각성</span>
+      <div class="hud-bw"><div class="hud-b ba" id="bar-awaken" style="width:5%"></div></div>
+      <span class="hud-vv" id="val-awaken">5</span>
+    </div>
+    <div class="hud-v">
+      <span class="hud-vl">과부하</span>
+      <div class="hud-bw"><div class="hud-b bo" id="bar-overload" style="width:0%"></div></div>
+      <span class="hud-vv" id="val-overload">0</span>
+    </div>
+  </div>
+  <div class="hud-timer" id="hud-timer">72:00:00</div>
+</div>
+
+<!-- 게임 메인 -->
+<div id="game-wrap">
+  <!-- 왼쪽: 에셋 영역 -->
+  <div id="asset-area">
+    <video id="scene-video" autoplay muted loop playsinline></video>
+    <div class="asset-tag" id="asset-tag">S01 · 서막</div>
+    <div class="asset-title fi" id="asset-title">소거의 밤</div>
+    <div class="blood-drip">
+      <div class="drip"></div>
+      <div class="drip"></div>
+      <div class="drip"></div>
+      <div class="drip"></div>
+      <div class="drip"></div>
+      <div class="drip"></div>
+      <div class="drip"></div>
+      <div class="drip"></div>
+      <div class="drip"></div>
+      <div class="drip"></div>
+    </div>
+    <div class="asset-sub" id="asset-sub">시스템 시작</div>
+    <div class="asset-line"></div>
+  </div>
+  <!-- 오른쪽: 대사 + 선택지 -->
+  <div id="right-panel">
+    <div id="content-area"></div>
+    <div id="choice-area"></div>
+  </div>
+</div>
+
+<audio id="bgm-player" preload="auto"></audio>
+
+<script>
+
+// ══ 씬별 영상/BGM 에셋 ══
+const SCENE_VIDEO = {
+  'S01': 'videos/S01.mp4',
+  'S02': 'videos/S02.mp4',
+  'S03': 'videos/S03.mp4',
+  'S04': 'videos/S04.mp4',
+  'S05': 'videos/S05.mp4',
+  'S06': 'videos/S06.mp4',
+  'S07': 'videos/S07.mp4',
+  'S08': 'videos/S08.mp4',
+  'S09': 'videos/S09.mp4',
+  'S10-A': 'videos/S10-A.mp4',
+  'S10-B': 'videos/S10-B.mp4',
+  'S10-C': 'videos/S10-C.mp4'
+};
+
+const SCENE_BGM = {
+  'S01': 'mp3/S01_BGM.mp3',
+  'S02': 'mp3/S02_BGM.mp3',
+  'S03': 'mp3/S03_BGM.mp3',
+  'S04': 'mp3/S04_BGM.mp3',
+  'S05': 'mp3/S05_BGM.mp3',
+  'S06': 'mp3/S06_BGM.mp3',
+  'S07': 'mp3/S07_BGM.mp3',
+  'S08': 'mp3/S08_BGM.mp3',
+  'S09': 'mp3/S09_BGM.mp3',
+  'S10-A': 'mp3/S10-A_BGM.mp3',
+  'S10-B': 'mp3/S10-B_BGM.mp3',
+  'S10-C': 'mp3/S10-C_BGM.mp3'
+};
+
+const SCENE_KEY_MAP = {
+  'S-TRUEEND': 'S10-A',
+  'S-BADEND': 'S10-B',
+  'S-GAMEOVER': 'S10-C'
+};
+
+function sceneAssetKey(id){
+  return SCENE_KEY_MAP[id] || id;
+}
+
+function playBGMByScene(id){
+  const bgm = document.getElementById('bgm-player');
+  if(!bgm) return;
+
+  const bgmKey = sceneAssetKey(id);
+  const src = SCENE_BGM[bgmKey];
+
+  if(!src){
+    bgm.pause();
+    bgm.removeAttribute('src');
+    bgm.dataset.current = '';
+    bgm.load();
+    return;
+  }
+
+  if(bgm.dataset.current !== bgmKey){
+    bgm.pause();
+    bgm.src = src;
+    bgm.currentTime = 0;
+    bgm.volume = 0.75;
+    bgm.dataset.current = bgmKey;
+  }
+
+  bgm.play().catch(()=>{});
+}
+
+function stopBGM(){
+  const bgm = document.getElementById('bgm-player');
+  if(!bgm) return;
+  bgm.pause();
+  bgm.removeAttribute('src');
+  bgm.dataset.current = '';
+  bgm.load();
+}
+
+
+let S = {
+  진실:0, 신뢰:0, 각성:5, 과부하:0,
+  타이머초: 72 * 3600,
+  콤보: false, 루프: 0, 씬:'S01'
+};
+let tiv = null;
+
+// ══ 타이핑 효과 상태 ══
+let typingQueue = [];
+let typingTimer = null;
+let typingNow = null;
+let typingFullText = '';
+const TYPING_SPEED = 34; // 숫자가 작을수록 빠름
+
+function typingActive(){
+  return typingNow !== null || typingQueue.length > 0;
+}
+
+function queueTyping(root){
+  const targets = root.querySelectorAll('.spk, .dlg-line, .stg-dir, .dir-block, .cond-block, .danger-block, .loop-block, .end-body');
+  targets.forEach(el=>{
+    const full = el.textContent;
+    el.dataset.fullText = full;
+    el.textContent = '';
+    typingQueue.push({el, full, i:0});
+  });
+  runTyping();
+}
+
+function runTyping(){
+  if(typingTimer || typingNow || typingQueue.length === 0) return;
+  typingNow = typingQueue.shift();
+  typingFullText = typingNow.full;
+  typingNow.el.classList.add('typing-now');
+
+  typingTimer = setInterval(()=>{
+    typingNow.i++;
+    typingNow.el.textContent = typingFullText.slice(0, typingNow.i);
+    const ca = document.getElementById('content-area');
+    if(ca) ca.scrollTop = ca.scrollHeight;
+
+    if(typingNow.i >= typingFullText.length){
+      clearInterval(typingTimer);
+      typingTimer = null;
+      typingNow.el.classList.remove('typing-now');
+      typingNow = null;
+      typingFullText = '';
+      runTyping();
+    }
+  }, TYPING_SPEED);
+}
+
+function completeTyping(){
+  if(typingTimer){
+    clearInterval(typingTimer);
+    typingTimer = null;
+  }
+  if(typingNow){
+    typingNow.el.textContent = typingNow.full;
+    typingNow.el.classList.remove('typing-now');
+    typingNow = null;
+  }
+  typingQueue.forEach(item=>{
+    item.el.textContent = item.full;
+    item.el.classList.remove('typing-now');
+  });
+  typingQueue = [];
+  typingFullText = '';
+  const ca = document.getElementById('content-area');
+  if(ca) ca.scrollTop = ca.scrollHeight;
+}
+
+document.addEventListener('click', function(e){
+  if(!typingActive()) return;
+  completeTyping();
+  e.preventDefault();
+  e.stopPropagation();
+}, true);
+
+document.addEventListener('keydown', function(e){
+  if(e.code !== 'Space' || !typingActive()) return;
+  completeTyping();
+  e.preventDefault();
+  e.stopPropagation();
+}, true);
+
+
+// ══ 타이머 ══
+function 타이머시작(){
+  if(tiv) clearInterval(tiv);
+  tiv = setInterval(()=>{
+    if(S.타이머초>0){ S.타이머초--; 타이머표시(); }
+    else{ clearInterval(tiv); 씬이동('S-BADEND'); }
+  },1000);
+}
+function 타이머표시(){
+  const t=Math.max(0,S.타이머초);
+  const h=Math.floor(t/3600),m=Math.floor((t%3600)/60),s=t%60;
+  const el=document.getElementById('hud-timer');
+  if(el) el.textContent=`${p(h)}:${p(m)}:${p(s)}`;
+}
+function p(n){return String(n).padStart(2,'0');}
+
+// ══ HUD ══
+function HUD(){
+  sv('bar-truth',S.진실); sv('bar-trust',S.신뢰);
+  sv('bar-awaken',S.각성); sv('bar-overload',S.과부하);
+  tx('val-truth',S.진실); tx('val-trust',S.신뢰);
+  tx('val-awaken',S.각성); tx('val-overload',S.과부하);
+  타이머표시();
+  document.getElementById('hud').classList.toggle('hud-danger',S.과부하>=80);
+}
+function sv(id,v){document.getElementById(id).style.width=Math.min(v,100)+'%';}
+function tx(id,v){document.getElementById(id).textContent=v;}
+
+// ══ 게임 시작 ══
+function startGame(){
+  document.getElementById('title-screen').style.display='none';
+  document.getElementById('hud').style.display='flex';
+  document.getElementById('game-wrap').style.display='flex';
+  HUD(); 타이머시작(); 씬이동('S01');
+}
+
+// ══ 변수 변경 ══
+function V(진실=0,신뢰=0,각성=0,과부하=0,th=0){
+  S.진실=cl(S.진실+진실); S.신뢰=cl(S.신뢰+신뢰);
+  S.각성=cl(S.각성+각성); S.과부하=cl(S.과부하+과부하);
+  S.타이머초=Math.max(0,S.타이머초-th*3600);
+  HUD();
+  if(S.과부하>=100){setTimeout(()=>씬이동('S-GAMEOVER'),300);return true;}
+  return false;
+}
+function cl(v){return Math.max(0,Math.min(100,v));}
+
+// ══ 씬 이동 ══
+function 씬이동(id){
+  completeTyping();
+  S.씬=id;
+  document.getElementById('content-area').innerHTML='';
+  document.getElementById('choice-area').innerHTML='';
+  // 씬별 영상 교체
+  const video = document.getElementById('scene-video');
+  if(video){
+    const videoKey = sceneAssetKey(id);
+    if(SCENE_VIDEO[videoKey]){
+      if(video.getAttribute('src') !== SCENE_VIDEO[videoKey]){
+        video.src = SCENE_VIDEO[videoKey];
+        video.load();
+      }
+      video.play().catch(()=>{});
+    } else {
+      video.removeAttribute('src');
+      video.load();
+    }
+  }
+  playBGMByScene(id);
+  const fn=씬목록[id];
+  if(fn) fn();
+  else C(`<div class="stg-dir" style="color:var(--red)">씬 없음: ${id}</div>`);
+  document.getElementById('content-area').scrollTop=0;
+}
+
+// ══ 에셋 설정 ══
+const 씬배경 = {
+  'S01': 'linear-gradient(160deg,#4a0808 0%,#1a0404 60%,#0d0202 100%)',
+  'S02': 'linear-gradient(160deg,#2a0a1a 0%,#150308 60%,#0a0205 100%)',
+  'S03': 'linear-gradient(160deg,#0a0a1a 0%,#050510 60%,#020208 100%)',
+  'S04': 'linear-gradient(160deg,#030d10 0%,#020810 60%,#010508 100%)',
+  'S05': 'linear-gradient(160deg,#1a0a0a 0%,#100505 60%,#080202 100%)',
+  'S06': 'linear-gradient(160deg,#1a0505 0%,#0d0202 60%,#080101 100%)',
+  'S07': 'linear-gradient(160deg,#0a0a20 0%,#050510 60%,#020208 100%)',
+  'S08': 'linear-gradient(160deg,#050a18 0%,#030810 60%,#010508 100%)',
+  'S09': 'linear-gradient(160deg,#150505 0%,#0a0202 60%,#050101 100%)',
+};
+
+function A(tag,title,sub){
+  document.getElementById('asset-tag').textContent=tag;
+  const el=document.getElementById('asset-title');
+  el.textContent=title; el.setAttribute('data-title', title); el.className='asset-title fi';
+  document.getElementById('asset-sub').textContent=sub;
+  // 씬별 배경은 씬이동 함수에서 이미지로 처리
+}
+
+// ══ 콘텐츠 빌더 ══
+function C(html){
+  const ca=document.getElementById('content-area');
+  const d=document.createElement('div');
+  d.className='fi';
+  d.innerHTML=html;
+  ca.appendChild(d);
+  queueTyping(d);
+}
+
+function dir(t){return `<div class="dir-block">${t}</div>`;}
+function DS(){return `<div class="dlg-block">`;}
+function DE(){return `</div>`;}
+function DA(화자,t){return `<div><div class="spk">${화자}</div><div class="dlg-line">${t}</div></div>`;}
+function SD(t){return `<div class="stg-dir">${t}</div>`;}
+function CO(t){return `<div class="cond-block">[ CONDITION ] ${t}</div>`;}
+function DG(t){return `<div class="danger-block">⚠ [DANGER] ${t}</div>`;}
+function LP(t){return `<div class="loop-block">↩ LOOP · ${t}</div>`;}
+
+// ══ 선택지 렌더 ══
+function CH(btns){
+  const ca=document.getElementById('choice-area');
+  ca.innerHTML='';
+  const single=btns.length===1;
+  btns.forEach(b=>{
+    const btn=document.createElement('button');
+    btn.className='c-btn'+(single?' single':'');
+    btn.innerHTML=`
+      <div>
+        <div class="c-lbl">${b.label}</div>
+        <div class="c-txt">${b.text}</div>
+      </div>
+      ${b.eff?`<div class="c-eff">${b.eff}</div>`:''}
+    `;
+    btn.onclick=b.go; ca.appendChild(btn);
+  });
+  if(single){
+    // 단일 선택지 아래 빈 공간
+    const sp=document.createElement('div');
+    sp.style.flex='1'; ca.appendChild(sp);
+  }
+}
+
+// ══ 엔딩 ══
+function END(type,tag,title,body,btn){
+  if(tiv) clearInterval(tiv);
+  const keyMap = {'t':'S10-A','b':'S10-B','g':'S10-C'};
+  const videoKey = keyMap[type];
+  const videoSrc = videoKey && SCENE_VIDEO[videoKey] ? SCENE_VIDEO[videoKey] : '';
+  if(videoKey) playBGMByScene(videoKey);
+  const gw=document.getElementById('game-wrap');
+  gw.innerHTML=`
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:40px 24px;gap:14px;background:#070101;position:relative;overflow:hidden;">
+      ${videoSrc ? `<video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(0.85);z-index:0;"><source src="${videoSrc}" type="video/mp4"></video>` : ''}
+      <div style="position:absolute;inset:0;background:rgba(0,0,0,0.45);z-index:0;"></div>
+      <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:14px;">
+        <div class="end-tag ${type}">${tag}</div>
+        <div class="end-title ${type}">${title}</div>
+        <div class="end-body">${body}</div>
+        <div class="end-stats">진실 ${S.진실} · 신뢰 ${S.신뢰} · 각성 ${S.각성} · 과부하 ${S.과부하}</div>
+        <button class="end-btn ${type}" onclick="RESTART()">${btn}</button>
+      </div>
+    </div>`;
+}
+
+// ══ 씬 목록 ══
+const 씬목록={
+
+'S01':()=>{
+  A('S01 · 서막','소거의 밤','시스템 시작');
+  C(dir('냉청색 암흑 속 기숙사 룸 408호. 형광등이 세 번 깜빡이다 꺼진다. 언니의 팔찌가 에메랄드빛으로 처음 진동한다.'));
+  C(DS()+
+    SD('아카데미아 제로. 이 학교에서 존재를 증명하는 방법은 하나다. 등급.')+
+    SD('형광등이 세 번 깜빡이다 꺼졌다. 장화의 손이 떨리고 있었다. 팔찌를 건네는 손이. 홍련은 그 손이 떨린다는 것을 알면서도 모른 척했다.')+
+    DA('배장화','"홍련아. 시간 없어. 이거 받아."')+
+    SD('팔찌를 건네며. 홍련은 팔찌를 받지 않으려 했다. 받으면 현실이 된다는 걸 알았으니까. 하지만 언니의 눈빛이 그녀의 손을 먼저 움직였다.')+
+    DA('배장화','"믿을 수 있는 사람을 찾아."')+
+    SD('소거 명령(배장화) 실행. 에메랄드빛 파편들이 공기 중으로 흩어졌다. 손바닥에 팔찌만 남았다. 차가웠다. 방금까지 언니의 체온이 남아 있던 것이. 잔여 시간 72시간. 홍련은 텅 빈 룸 408호에 혼자 남았다.')+
+  DE());
+  CH([
+    {label:'A. 증거 루트',text:'팔찌 신호를 따라 허세령 방향으로 이동한다.',eff:'진실 +25 / 신뢰 -5',go:()=>{V(25,-5,0,0,0);씬이동('S03');}},
+    {label:'B. 신뢰 루트',text:'아버지 배중석에게 먼저 달려간다.',eff:'진실 +15 / 신뢰 +10',go:()=>{V(15,10,0,0,0);씬이동('S02');}}
+  ]);
+},
+
+'S02':()=>{
+  A('S02 · 전개','아버지의 방','신뢰 잠금');
+  V(0,0,0,0,1);
+  const 톤=S.신뢰>=10;
+  C(dir('교학처 교감실. 새벽 1시. 형광등 직광. GMC 판정 결과서: STATUS: 낙인 / X등급. 친모의 액자가 뒤집혀 있다.'));
+  C(DS()+
+    SD('배중석 교감. GMC의 판정을 한 번도 의심한 적 없는 사람. 그것이 신념인지, 두려움인지는 홍련도 알 수 없었다.')+
+    SD('교감실 문을 두드리는 손이 두 번 멈췄다. 홍련은 주먹을 쥐었다 폈다. 세 번째에 문을 두드렸다. 배중석이 고개를 들었다. 딸의 얼굴을 보는 순간 표정이 굳었다. 그는 GMC 판정 결과서를 천천히 책상에 내려놓고 창밖으로 시선을 돌렸다. 홍련의 눈을 피하는 방식이 너무 익숙했다.')+
+    DA('배홍련','"아빠, 언니 데이터가 조작됐어."')+
+    SD('배중석의 어깨가 살짝 내려앉았다. 확신하는 사람의 어깨가 아니었다. 믿고 싶은 사람의 어깨였다.')+
+    DA('배중석',톤?'"…그런 말을 쉽게 할 수가 없구나."':'"등급 판정은 오류가 없어. 공식 판정이야."')+
+    SD('책상 위의 친모 액자가 뒤집혀 있었다. 아버지의 눈에서 장화가 이미 지워지고 있었다.')+
+  DE());
+  CH([
+    {label:'A. 감정 호소',text:'뒤집힌 친모의 액자를 바로 세우며 호소한다.',eff:'신뢰 +25 / 조합 플래그 등록',go:()=>{V(0,25,0,0,0);S.콤보=true;씬이동('S03');}},
+    {label:'B. 데이터 제시',text:'언니의 팔찌로 허세령의 접근 로그를 보여준다.',eff:'신뢰 +10 / 진실 +20',go:()=>{V(20,10,0,0,0);씬이동('S03');}}
+  ]);
+},
+
+'S03':()=>{
+  A('S03 · 전개','B구역의 문','구역 진입');
+  V(0,0,0,0,3);
+  C(dir('격리 병동 B구역 입구. 새벽 2시. 철문에 접근 거부 홀로그램. 문틈으로 에메랄드빛이 새어나온다.'));
+  C(DS()+
+    SD('B구역. 소거된 학생들의 잔상이 모인다는 곳. 공식적으로는 존재하지 않는 구역. 지도에도 없고, 교칙에도 없고, 어느 선생님도 언급한 적 없는.')+
+    SD('철문 앞에 서자 팔찌가 진동했다. 홍련은 손목을 감쌌다. 접근 거부 홀로그램이 붉게 떠 있었다. 문틈 사이로 에메랄드빛이 가늘게 새어나왔다.')+
+    DA('배홍련','"언니가 저 안에 있어."')+
+    SD('그때 발소리가 들렸다. 복도 끝에 장쇠가 있었다. 그의 눈이 홍련을 봤다. 정확히 봤다. 그리고 시선을 피했다. 너무 빠르게. 뭔가를 아는 사람이 모르는 척하는 속도로. 그는 말없이 반대 방향으로 걸어갔다.')+
+  DE());
+  CH([
+    {label:'A. 기술 우회',text:'언니의 팔찌로 잠금 패턴을 분석해 우회한다.',eff:'각성 +15 / 과부하 +5',go:()=>{const o=V(0,0,15,5,0);if(!o)씬이동('S04');}},
+    {label:'B. 강제 돌파',text:'시스템을 무시하고 강제 진입한다.',eff:'각성 +10 / 과부하 +15 / 타이머 -1h',go:()=>{const o=V(0,0,10,15,1);if(!o)씬이동('S04');}}
+  ]);
+},
+
+'S04':()=>{
+  A('S04 · 전개 ↩ LOOP','잔상 첫 접촉','잔상 신호');
+  if(S.루프>0){V(0,0,10,0,0);C(LP(`RETRY ${S.루프}/2 · 각성 +10 자동 적용`));}
+  V(0,0,0,0,3);
+  C(dir('B구역 내부. 완전한 암흑. 바닥에 에메랄드빛 데이터 파편이 흩어진다. 잔상 신호 DETECTED / STABILITY: 12%'));
+  if(S.각성>=20){
+    C(SD('각성이 충분하다. 언니의 윤곽이 흐릿하게나마 보이기 시작한다.'));
+    C(DS()+
+      SD('소거 명령이 실행됐지만 완전히 지워지지 않은 것들이 있다. 집착이 너무 강하거나, 억울함이 너무 깊거나. 장화가 그랬다.')+
+      SD('완전한 암흑이었다. 홍련은 손을 뻗어 벽을 더듬었다. 차가웠다. 바닥의 에메랄드빛 파편들이 발을 디딜 때마다 흩어졌다. 팔찌가 강하게 진동했다. 홍련은 그 자리에 멈췄다. 숨을 참고. 귀를 기울이고.')+
+      DA('배장화 (잔상)','"홍련아… 내가 본 걸… 허세령이… 내 파일을…"')+
+      SD('목소리가 끊겼다. 홍련의 손이 팔찌를 꽉 쥐었다. 손가락 마디가 하얗게 변할 때까지.')+
+      DA('배홍련','"언니! 조금만 더—"')+
+      SD('신호가 불안정하다. 홍련은 무릎을 굽혀 바닥의 파편에 손바닥을 올렸다. 뜨거웠다. 각성할수록 과부하가 쌓인다. 그걸 알면서도 손을 떼지 않았다.')+
+    DE());
+    CH([
+      {label:'A. 강제 증폭',text:'언니의 팔찌로 신호를 강제 증폭한다.',eff:'각성 +35 / 진실 +25 / 과부하 +20',go:()=>{const o=V(25,0,35,20,0);if(!o)씬이동('S05');}},
+      {label:'B. 인내 대기',text:'팔찌를 내리고 잔상이 스스로 말할 때까지 기다린다.',eff:'각성 +20 / 신뢰 +5 / 과부하 없음',go:()=>{V(0,5,20,0,0);씬이동('S05');}}
+    ]);
+  }else{
+    C(SD('각성이 부족하다. 언니의 신호가 너무 희미하다.'));
+    C(DS()+SD('잔상이 너무 희미하다. 팔찌가 떨리지만 신호가 잡히지 않는다.')+DE());
+    CH([
+      {label:'A. 강제 증폭 시도',text:'불완전하지만 언니의 팔찌로 신호를 증폭한다.',eff:'각성 +15 / 과부하 +15',go:()=>{const o=V(0,0,15,15,0);if(!o)씬이동('S05');}},
+      {label:'B. 되돌아가기',text:'증거를 더 모은 후 다시 시도한다.',eff:'→ S03 귀환',go:()=>씬이동('S03')}
+    ]);
+  }
+},
+
+'S05':()=>{
+  A('S05 · 전개','허세령의 감시','감시 경보');
+  V(0,0,0,0,3);
+  C(dir('기숙사 1층 로비. 새벽 4시. 허세령이 역광 속에 서 있다. UI: NOISE_LEVEL: ELEVATED'));
+  if(S.진실>=30){
+    C(SD('증거가 쌓이고 있다는 것을 허세령도 감지했다.'));
+    C(DS()+
+      SD('허세령은 기다리고 있었다. 데이터는 거짓말을 하지 않으니까.')+
+      SD('로비에 들어서는 순간 홍련은 발이 멈췄다. 허세령이 역광 속에 서 있었다. 기다리는 것이 분명했다. 홍련은 표정을 정돈하는 데 0.3초가 걸렸다. 허세령은 그것을 봤다.')+
+      DA('허세령','"홍련 학생, 요즘 이동 로그가 좀 불규칙하네."')+
+      SD('홍련의 시선이 잠깐 바닥으로 향했다가 돌아왔다. 허세령의 입꼬리가 아주 미세하게 움직였다.')+
+      DA('배홍련','"…산책이요."')+
+      DA('허세령','"그리고 그 팔찌. 미신고 개인 능력 도구는 몰수 대상이야."')+
+      SD('홍련은 반사적으로 팔찌를 감쌌다. 그리고 그 행동이 실수였다는 것을 깨달았다. 허세령의 눈이 홍련의 손목으로 향했다. 지금 모은 증거들이 사라질 수도 있다. 선택해야 한다.')+
+    DE());
+    CH([
+      {label:'A. 기술 차단',text:'언니의 팔찌로 삭제 명령을 차단한다.',eff:'진실 보존 / 각성 +20 / 과부하 +15',go:()=>{const o=V(0,0,20,15,0);if(!o)씬이동('S06');}},
+      {label:'B. 즉시 공개',text:'수집한 증거를 익명 포털에 즉시 제보한다.',eff:'진실 -10 / 신뢰 +15 / 조합 대체 등록',go:()=>{V(-10,15,0,0,0);S.콤보=true;씬이동('S06');}}
+    ]);
+  }else{
+    C(SD('아직 증거가 충분하지 않다. 허세령은 경고만 남기고 자리를 뜬다.'));
+    C(DS()+DA('허세령','"…조심해."')+SD('그녀가 돌아선다. 아직은 아니다.')+DE());
+    CH([{label:'→ 계속 진행',text:'장쇠를 찾아 나선다.',eff:'',go:()=>씬이동('S06')}]);
+  }
+},
+
+'S06':()=>{
+  A('S06 · 절정','장쇠의 실토','CONFESSION · 1회 퇴장');
+  V(0,0,0,0,3);
+  C(dir('기숙사 3층 복도. 새벽 5시. 비상구 표시등 붉은빛. 장쇠의 왼손 명령서 홀로그램이 처음으로 꺼져 있다.'));
+  if(S.진실>=30){
+    C(SD('증거가 충분하다. 장쇠의 표정이 흔들리기 시작한다.'));
+    C(DS()+
+      SD('장쇠는 나쁜 사람이 아니었다. 그저 명령을 따랐을 뿐이다.')+
+      SD('장쇠가 벽에 등을 기대고 서 있었다. 왼손이 비어 있었다. 명령서 홀로그램이 꺼진 채로. 홍련이 다가서자 장쇠가 고개를 들었다. 피하려는 기색이 역력했다. 하지만 피하지 않았다.')+
+      DA('장쇠','"나는… 시킨 대로 했을 뿐이야."')+
+      SD('장쇠의 목소리가 낮았다. 자신에게 하는 말 같았다. 왼손으로 오른팔을 잡았다. 뭔가를 참을 때마다 그렇게 하는 사람처럼.')+
+      DA('배홍련','"누가 시켰어?"')+
+      DA('장쇠','"허 사감이 직접 명령서를 보냈어. 디지털 서명까지 있었고."')+
+      SD('말을 다 하고 나서 장쇠는 크게 숨을 내쉬었다. 오래 참고 있었던 것처럼. 장쇠의 눈에 두려움과 안도가 동시에 있었다.')+
+    DE());
+    CH([
+      {label:'A. 경청',text:'장쇠의 말을 끝까지 들어준다.',eff:'진실 +35 / 신뢰 +10 / 각성 +15 / 과부하 -10',go:()=>{V(40,10,15,-10,0);씬이동('S07');}},
+      {label:'B. 즉시 스캔',text:'언니의 팔찌로 명령서 데이터를 즉시 추출한다.',eff:'진실 +20',go:()=>{V(20,0,0,0,0);씬이동('S07');}}
+    ]);
+  }else{
+    C(LP(`진실 지수 부족 (현재: ${S.진실} / 필요: 70)`));
+    C(DS()+DA('장쇠','"증거가 없으면 나도 어쩔 수 없어."')+SD('장쇠가 돌아선다.')+DE());
+    if(S.루프<2){
+      CH([
+        {label:'↩ 재시도',text:'잔상에 다시 접근해 더 많은 정보를 얻는다.',eff:`타이머 -${S.루프+1}h / 각성 +10 자동`,go:()=>{const p=S.루프+1;S.루프++;V(0,0,0,0,p);씬이동('S04');}},
+        {label:'→ 강행 진행',text:'증거가 부족하지만 다음 단계로 강행한다.',eff:'BAD_END 위험',go:()=>씬이동('S07')}
+      ]);
+    }else{
+      C(`<div class="danger-block">루프 한도 초과. S07 강제 진행.</div>`);
+      CH([{label:'→ 앞으로 나아간다',text:'더 이상 시간이 없다.',eff:'',go:()=>씬이동('S07')}]);
+    }
+  }
+},
+
+'S07':()=>{
+  A('S07 · 절정','배중석의 각성','신뢰 해제');
+  V(0,0,0,0,3);
+  C(dir('교학처 교감실. 오전 6시. 창밖으로 새벽빛이 들어온다. 친모의 액자가 바로 세워져 있다. 배중석이 GMC 결과서를 덮고 창밖을 바라본다.'));
+  if(S.신뢰<30){
+    C(`<div class="danger-block">⚠ 신뢰 지수 ${S.신뢰} < 30 — 진입 차단</div>`);
+    C(DS()+DA('배중석','"더 이상 이 얘기는 하지 말아라."')+SD('아버지가 문을 닫는다. 홍련은 혼자다.')+DE());
+    CH([{label:'→ 계속 진행',text:'오세진을 직접 찾아간다.',eff:'BAD_END 위험',go:()=>씬이동('S08')}]);
+  }else if(S.신뢰<50){
+    C(SD('아버지가 문을 열었다. 하지만 완전히 마음을 열지는 않았다.'));
+    C(DS()+SD('배중석이 문을 열었다. 하지만 눈빛이 흔들리지 않는다.')+DA('배중석','"…무슨 말을 하려는 거냐."')+DE());
+    CH([
+      {label:'A. 데이터 제시',text:'수집한 증거 데이터를 제시한다.',eff:'신뢰 +20',go:()=>{V(0,20,0,0,0);씬이동('S08');}},
+      {label:'B. 감정 호소',text:'친모의 기억으로 감정에 호소한다.',eff:'신뢰 +15',go:()=>{V(0,15,0,0,0);씬이동('S08');}}
+    ]);
+  }else{
+    C(SD(`아버지의 눈빛이 달라졌다. 처음으로 홍련의 말을 들을 준비가 된 것 같다.${S.콤보?' 그리고 지금, 감정과 증거를 동시에 꺼낼 수 있다.':''}`));
+    C(DS()+
+      SD('배중석은 나쁜 사람이 아니었다. 시스템을 너무 믿었을 뿐이다. 그 믿음이 딸을 지웠다는 사실을 그는 아직 완전히 받아들이지 못하고 있었다.')+
+      SD('교감실 문을 열었을 때 아버지는 등을 보이고 서 있었다. 창문에 아버지의 얼굴이 반사됐다. 눈을 감고 있었다. 홍련이 들어오는 소리를 들었을 것이다. 그래도 돌아서지 않았다.')+
+      DA('배홍련','"아빠. 마지막으로 한 번만."')+
+      SD('배중석의 어깨가 미세하게 움직였다. 무언가를 결심하려다가, 다시 멈추는 것처럼.')+
+      DA('배중석','"…홍련아, 내가 뭘 할 수 있겠어."')+
+      SD('홍련은 그 말이 포기가 아니라는 것을 알았다. 두려움이었다.')+
+      DA('배홍련','"아빠는 증인이 될 수 있어."')+
+      SD('홍련이 책상 위의 뒤집혀 있던 액자를 집어 들었다. 엄마의 얼굴이 나타났다. 배중석이 천천히 돌아섰다. 그의 눈이 흔들렸다.')+
+      DA('배중석','"…너희 엄마라면 뭐라고 했을까."')+
+      SD('아버지가 처음으로 시스템 밖을 보고 있었다.')+
+    DE());
+    if(S.콤보){
+      CH([
+        {label:'A. 조합 설득 [조합]',text:'데이터와 감정 호소를 동시에 사용한다.',eff:'신뢰 +35 / 진실 +10 / 각성 +25 / 과부하 -15',go:()=>{const o=V(10,35,25,-15,0);if(!o)씬이동('S08');}},
+        {label:'B. 단독 설득',text:'데이터 또는 감정 중 하나만 선택한다.',eff:'신뢰 +18',go:()=>{V(0,18,0,0,0);씬이동('S08');}}
+      ]);
+    }else{
+      CH([
+        {label:'A. 데이터 제시',text:'수집한 증거 데이터를 제시한다.',eff:'신뢰 +20',go:()=>{V(0,20,0,0,0);씬이동('S08');}},
+        {label:'B. 감정 호소',text:'친모의 기억으로 감정에 호소한다.',eff:'신뢰 +15',go:()=>{V(0,15,0,0,0);씬이동('S08');}}
+      ]);
+    }
+  }
+},
+
+'S08':()=>{
+  A('S08 · 절정','장화의 풀 기억','완전한 잔상 · 최강 딜레마');
+  V(0,0,0,0,6);
+  C(dir('B구역 심층부. 오전 8시. 에메랄드빛이 공간 전체를 채운다. ECHO STABILITY: 98%. 장화의 실루엣이 처음으로 선명하게 고정된다.'));
+  if(S.각성>=90){
+    C(SD('각성이 정점에 달했다. 언니의 잔상이 완전한 형태로 나타난다.'));
+    C(DG('Full Memory 전송 시 과부하 +40 급상승. 과부하 100 도달 시 소거 명령(배홍련) 즉시 발동'));
+    C(DS()+
+      SD('처음으로 언니가 완전히 보였다. 흐릿하지 않았다. 끊기지 않았다.')+
+      SD('홍련은 숨을 멈췄다. 언니의 실루엣이 선명하게 고정돼 있었다. 손을 뻗으면 닿을 것 같았다. 뻗지 않았다. 닿지 않는다는 것을 알고 있었으니까.')+
+      DA('배장화 (잔상)','"홍련아. 나 봤어. 허세령이 내 파일을 덮어씌우는 걸. 위조된 진단 파일. 직접 실행했어."')+
+      SD('홍련의 눈이 떨렸다. 하지만 그 다음 말이 나오기 전에 홍련은 언니의 표정을 봤다. 망설임. 뭔가를 잃는 것에 대한.')+
+      DA('배홍련','"언니, 그 기억 나한테 줄 수 있어? 증거로 쓸게."')+
+      SD('장화의 실루엣이 흔들렸다. 홍련은 그 흔들림의 의미를 알았다.')+
+      DA('배장화 (잔상)','"홍련아. 나… 아직 여기 있어도 돼?"')+
+      SD('홍련의 입술이 열렸다가 닫혔다. 한 번, 두 번. 언니를 증거로 쓸 것인가. 언니를 언니로 남길 것인가. 팔찌가 뜨겁게 진동했다.')+
+    DE());
+    CH([
+      {label:'A. 기억 저장',text:'위조 현장 기억을 증거 파일로 압축 저장한다.',eff:'진실 +30 / 과부하 +30 ⚠ DANGER',go:()=>{const o=V(30,0,0,30,0);if(!o)씬이동('S09');}},
+      {label:'B. 기억 해방',text:'저장하지 않고 잔상을 자유롭게 놓아준다.',eff:'진실 +20 / 과부하 변화 없음',go:()=>{V(20,0,0,0,0);씬이동('S09');}}
+    ]);
+  }else{
+    C(SD('각성이 부족하다. 언니의 잔상이 나타났지만 말을 끝까지 잇지 못한다.'));
+    C(DS()+SD('언니의 실루엣이 나타났다. 하지만 말이 끊겼다.')+DA('배장화 (잔상)','"홍련아… 나… 기억이…"')+SD('신호가 사라진다.')+DE());
+    CH([{label:'→ 오세진에게 향한다',text:'불완전하지만 지금 가진 것으로 맞선다.',eff:'BAD_END 위험 높음',go:()=>씬이동('S09')}]);
+  }
+},
+
+'S09':()=>{
+  A('S09 · 결말','오세진의 심판','최고 권한 발동');
+  V(0,0,0,0,1);
+  const c1=S.진실>=80,c2=S.신뢰>=70,c3=S.각성>=90,c4=S.과부하<80;
+  const pass=c1&&c2&&c3&&c4;
+  C(`<div class="cond-block">
+    [ GATE CHECK ]<br>
+    진실 지수 ≥ 80 : ${c1?'✓ PASS':`✗ FAIL (현재: ${S.진실})`}<br>
+    신뢰 지수 ≥ 70 : ${c2?'✓ PASS':`✗ FAIL (현재: ${S.신뢰})`}<br>
+    각성 지수 ≥ 90 : ${c3?'✓ PASS':`✗ FAIL (현재: ${S.각성})`}<br>
+    과부하 수치 < 80 : ${c4?'✓ PASS':`✗ FAIL (현재: ${S.과부하})`}
+  </div>`);
+  C(dir('윤리위원회 심판실. TIMER: 00:01:00. 정면 백색광. 사이킥 잔상 신호가 심판실 전체에 퍼진다. 오세진이 신호를 보고도 자리를 지킨다.'));
+  C(DS()+
+    SD('72시간의 끝. 심판실 문이 열렸을 때 홍련의 다리가 한 박자 늦게 따라왔다.')+
+    SD('오세진이 정면에 앉아 있었다. 사이킥 잔상 신호가 심판실 전체에 퍼지고 있었다. 언니의 흔적이었다. 오세진은 그 신호를 보면서도 자리를 지켰다. 도망치지 않는 유일한 어른.')+
+    DA('오세진','"…계속해."')+
+    SD('홍련은 숨을 한 번 들이켰다. 72시간 동안 준비한 말이었다. 잠깐 눈을 감았다 뜨고.')+
+    DA('배홍련','"언니는 X등급이 아니에요. 데이터가 조작됐어요."')+
+    SD('배중석이 앞으로 한 발 나섰다. 홍련은 아버지를 보지 않았다. 보면 울 것 같았으니까.')+
+    (c2?DA('배중석','"제가 증언하겠습니다."'):'')+
+    SD('오세진이 파일을 검토했다. 긴 침묵. 홍련은 그 침묵 동안 팔찌를 쥐었다. 언니의 온도가 아직 거기 있는 것처럼.')+
+    (pass?DA('오세진','"위조된 진단 파일 원본 대조 완료. 복원 명령(배장화) 실행합니다."'):'')+
+    SD(pass?'처음으로 시스템이 틀렸다고 말하는 사람이 생겼다.':'오세진이 파일을 닫는다. 증거가 충분하지 않다.')+
+  DE());
+  if(pass){
+    CH([
+      {label:'A. 솔직한 고백',text:'모든 수단과 과정을 오세진에게 고백한다.',eff:'과부하 -10 / 장화 특별 메시지 해금',go:()=>{V(0,0,0,-10,0);씬이동('S-TRUEEND');}},
+      {label:'B. 결과만 제출',text:'증거 파일만 제출하고 수단은 말하지 않는다.',eff:'변수 변화 없음',go:()=>씬이동('S-TRUEEND')}
+    ]);
+  }else{
+    CH([{label:'→ 결과를 받아들인다',text:'홍련은 고개를 숙인다.',eff:'',go:()=>씬이동('S-BADEND')}]);
+  }
+},
+
+'S-TRUEEND':()=>END('t','TRUE END','해방자<br><small style="font-family:\'Share Tech Mono\',monospace;font-size:13px;letter-spacing:3px">복원 완료</small>','복원 완료.<br>삭제되지 않은 데이터 하나가<br>끝내 진실을 증명했다.','[ RESTART ]'),
+'S-BADEND':()=>END('b','BAD END','묻힌 진실','진실은 있었다.<br>하지만 72시간은 충분하지 않았다.<br>시스템은 오늘도 작동한다.','[ RETRY ]'),
+'S-GAMEOVER':()=>END('g','GAME OVER','두 번째 소거<br><small style="font-family:\'Share Tech Mono\',monospace;font-size:13px;letter-spacing:2px">소거 명령(배홍련)</small>','언니를 찾으러 갔다가<br>함께 지워졌다.','[ RESTART ]')
+};
+
+// ══ 재시작 ══
+function RESTART(){
+  completeTyping();
+  if(tiv) clearInterval(tiv);
+  stopBGM();
+  S={진실:0,신뢰:0,각성:5,과부하:0,타이머초:72*3600,콤보:false,루프:0,씬:'S01'};
+  const gw=document.getElementById('game-wrap');
+  gw.innerHTML=`
+    <div id="asset-area">
+      <video id="scene-video" autoplay muted loop playsinline></video>
+      <div class="asset-tag" id="asset-tag">S01 · 서막</div>
+      <div class="asset-title fi" id="asset-title">소거의 밤</div>
+      <div class="asset-sub" id="asset-sub">시스템 시작</div>
+      <div class="asset-line"></div>
+    </div>
+    <div id="right-panel">
+      <div id="content-area"></div>
+      <div id="choice-area"></div>
+    </div>`;
+  HUD();
+  타이머시작();
+  씬이동('S01');
+}
+</script>
+</body>
+</html>
